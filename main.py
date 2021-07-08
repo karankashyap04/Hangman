@@ -94,6 +94,7 @@ def player2(word_statusX, word_statusY, player2_promptX, player2_promptY):
     global wrong_letters_list
     global word_guessed
 
+    # Updating the display of the word guessed so far by the user
     word_status = ""
     for letter in player1_answer:
         if letter in correct_letters_list:
@@ -111,7 +112,7 @@ def player2(word_statusX, word_statusY, player2_promptX, player2_promptY):
     player2_prompt_text = player2_prompt_font.render("Player 2, enter a letter: " + str(player2_answer), True, (0, 0, 0))
     screen.blit(player2_prompt_text, (player2_promptX, player2_promptY))
 
-    # Call draw1, draw2, etc. functions (hangman parts)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    # Drawing the hanging man based on number of wrong guesses
     draw_base()
     if len(wrong_letters_list) >= 1:
         draw1()
@@ -128,6 +129,7 @@ def player2(word_statusX, word_statusY, player2_promptX, player2_promptY):
     if len(wrong_letters_list) == 7:
         draw7()
 
+    # Displaying the correct and wrong letters guessed so far; separating sections by a line
     pygame.draw.line(screen, (0, 0, 0), (width/2, 400), (width/2, 770))
 
     correct_letters_heading_text = letters_done_font.render("Accepted letters:", True, (0, 255, 0))
@@ -188,7 +190,7 @@ while running:
             pygame.quit()
 
         if event.type == pygame.KEYDOWN:
-            if not player1_answered:
+            if not player1_answered:  # if player 1 is still entering a word
                 if event.key == pygame.K_RETURN:
                     # Validate the word
                     valid_word = check_word(player1_answer)
@@ -218,7 +220,7 @@ while running:
                 elif len(player1_answer) <= 8:
                     player1_answer += event.unicode
 
-            else:
+            else:  # if player 1 has already entered a word (i.e. player 2 is playing now)
                 if event.key == pygame.K_RETURN:
                     if player2_answer in player1_answer:
                         correct_letters_list.append(player2_answer)
